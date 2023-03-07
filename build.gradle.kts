@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("java")
     `java-library`
     `maven-publish`
     id("com.diffplug.spotless") version "6.16.0"
     id("de.chojo.publishdata") version "1.1.0"
+    kotlin("jvm") version "1.8.20-Beta"
 }
 
 group = "de.chojo"
@@ -12,6 +15,7 @@ version = "1.0.0"
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     // Logging
@@ -29,6 +33,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 spotless {
@@ -36,6 +41,11 @@ spotless {
         licenseHeaderFile(rootProject.file("HEADER.txt"))
         target("**/*.java")
     }
+}
+
+publishData {
+    useEldoNexusRepos()
+    publishComponent("java")
 }
 
 publishing {
@@ -80,4 +90,12 @@ tasks {
             events("passed", "skipped", "failed")
         }
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
