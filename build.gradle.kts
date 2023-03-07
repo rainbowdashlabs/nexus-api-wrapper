@@ -2,10 +2,12 @@ plugins {
     id("java")
     `java-library`
     `maven-publish`
+    id("com.diffplug.spotless") version "6.16.0"
+    id("de.chojo.publishdata") version "1.1.0"
 }
 
 group = "de.chojo"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -29,12 +31,53 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
-tasks{
-            test {
-            useJUnitPlatform()
-            testLogging {
-                events("passed", "skipped", "failed")
+spotless {
+    java {
+        licenseHeaderFile(rootProject.file("HEADER.txt"))
+        target("**/*.java")
+    }
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        publishData.configurePublication(this)
+        pom {
+            url.set("https://github.com/rainbowdashlabs/universalis-java")
+            developers {
+                developer {
+                    name.set("Florian Fülling")
+                    url.set("https://github.com/rainbowdashlabs")
+                }
+            }
+            licenses {
+                license {
+                    name.set("GNU Affero General Public License v3.0")
+                    url.set("https://github.com/rainbowdashlabs/universalis-java/blob/main/LICENSE.md")
+                }
             }
         }
+    }
 
+    repositories {
+        maven {
+            authentication {
+                credentials(PasswordCredentials::class) {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+
+            setUrl(publishData.getRepository())
+            name = "EldoNexus"
+        }
+    }
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+    }
 }
