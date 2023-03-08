@@ -28,7 +28,7 @@ dependencies {
     api("org.apache.httpcomponents.client5", "httpclient5", "5.1.3")
 
     // code
-    api("org.jetbrains", "annotations", "23.0.0")
+    api("org.jetbrains", "annotations", "23.1.0")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
