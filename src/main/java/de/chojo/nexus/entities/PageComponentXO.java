@@ -6,13 +6,14 @@
 
 package de.chojo.nexus.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collection;
 import java.util.List;
 
-public record PageComponentXO(List<ComponentXO> items,
-                              String continuationToken) implements CollectionAdapter<ComponentXO> {
+public record PageComponentXO(@JsonProperty List<ComponentXO> items,
+                              @JsonProperty String continuationToken) implements CollectionAdapter<ComponentXO> {
 
-    @Override
     public Collection<ComponentXO> collection() {
         return items;
     }

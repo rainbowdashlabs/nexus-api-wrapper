@@ -9,7 +9,7 @@ package de.chojo.nexus.entities;
 import java.util.Collection;
 import java.util.List;
 
-public record PageAssetXO(List<AssetXO> items, String continuationToken) implements CollectionAdapter<AssetXO> {
+public record PageAssetXO(List<AssetXO> items, String continuationToken) implements CollectionProvider<AssetXO> {
     @Override
     public Collection<AssetXO> collection() {
         return items;
