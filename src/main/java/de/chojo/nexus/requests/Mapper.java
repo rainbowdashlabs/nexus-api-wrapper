@@ -9,10 +9,13 @@ package de.chojo.nexus.requests;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import de.chojo.nexus.NexusRest;
+import de.chojo.nexus.NexusRestImpl;
 
 /**
  * Class providing preconfigured {@link ObjectMapper}
@@ -27,9 +30,13 @@ public final class Mapper {
      *
      * @return object mapper
      */
-    public static ObjectMapper create() {
+    public static ObjectMapper create(NexusRestImpl nexusRest) {
         SimpleModule module = new SimpleModule();
+        InjectableValues.Std iv = new InjectableValues.Std();
+        iv.addValue(NexusRest.class, nexusRest);
+        //iv.addValue(NexusRestImpl.class, nexusRest);
         return new JsonMapper()
+                .setInjectableValues(iv)
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NONE)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

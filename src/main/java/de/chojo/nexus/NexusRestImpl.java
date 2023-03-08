@@ -12,6 +12,7 @@ import de.chojo.nexus.requests.Mapper;
 import de.chojo.nexus.routes.v1.V1;
 import io.github.bucket4j.Bucket;
 import org.apache.hc.core5.net.URIBuilder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -20,6 +21,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -52,7 +55,7 @@ public class NexusRestImpl implements NexusRest {
         this.executorService = executorService;
         this.host = host;
         this.header = header;
-        this.objectMapper = Mapper.create();
+        this.objectMapper = Mapper.create(this);
         this.v1 = new V1(this);
     }
 
@@ -211,17 +214,38 @@ public class NexusRestImpl implements NexusRest {
     }
 
     public byte[] getBytes(URI uri) {
-        return dispatch(() -> getBytesInternal(HttpRequest.newBuilder(uri).GET().build()));
+        return dispatch(() -> getBytesInternal(request(uri).GET().build()));
     }
 
     public CompletableFuture<byte[]> getAsyncBytes(URI uri) {
-        return dispatchAsync(() -> getBytesInternal(HttpRequest.newBuilder(uri).GET().build()));
+        return dispatchAsync(() -> getBytesInternal(request(uri).GET().build()));
     }
 
     private byte[] getBytesInternal(HttpRequest request) {
         try {
             log.trace("Requesting {}", request.uri());
             HttpResponse<byte[]> response = http().send(request, HttpResponse.BodyHandlers.ofByteArray());
+            log.trace("Received\n{}", response.body());
+            handleStatusCode(response);
+            return response.body();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Path getToFile(URI uri, @Nullable Path path) {
+        return dispatch(() -> getToFileInternal(request(uri).GET().build(), path));
+    }
+
+    public CompletableFuture<Path> getAsyncToFile(URI uri, @Nullable Path path) {
+        return dispatchAsync(() -> getToFileInternal(request(uri).GET().build(), path));
+    }
+
+    private Path getToFileInternal(HttpRequest request, @Nullable Path path) {
+        try {
+            path = path == null ? Files.createTempFile("nexus", "file") : path;
+            log.trace("Requesting {}", request.uri());
+            HttpResponse<Path> response = http().send(request, HttpResponse.BodyHandlers.ofFile(path));
             log.trace("Received\n{}", response.body());
             handleStatusCode(response);
             return response.body();
@@ -242,5 +266,22 @@ public class NexusRestImpl implements NexusRest {
     @Override
     public V1 v1() {
         return v1;
+    }
+
+    public <T> CompletableFuture<T> deleteAsync(URI uri) {
+        return dispatchAsync(() -> delete(uri));
+    }
+
+    public <T> T delete(URI uri) {
+        try {
+            HttpRequest request = request(uri).DELETE().build();
+            log.trace("Requesting {}", request.uri());
+            HttpResponse<String> response = http().send(request, HttpResponse.BodyHandlers.ofString());
+            log.trace("Received\n{}", response.body());
+            handleStatusCode(response);
+            return null;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
