@@ -7,8 +7,9 @@
 package de.chojo.nexus.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record AssetXO(@JsonProperty String downloadUrl,
                       @JsonProperty String path,
@@ -16,10 +17,12 @@ public record AssetXO(@JsonProperty String downloadUrl,
                       @JsonProperty String Repository,
                       @JsonProperty String format,
                       @JsonProperty String contentType,
-                      @JsonProperty String lastModified,
-                      @JsonProperty String lastDownloaded,
+                      @JsonProperty OffsetDateTime lastModified,
+                      @JsonProperty @Nullable OffsetDateTime lastDownloaded,
                       @JsonProperty Checksum checksum,
                       @JsonProperty String uploader,
                       @JsonProperty String uploaderIp,
-                      @JsonProperty int fileSize) {
+                      @JsonProperty int fileSize,
+                      @JsonProperty MavenMeta maven2) {
+
 }
