@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
     id("com.diffplug.spotless") version "6.16.0"
     id("de.chojo.publishdata") version "1.1.0"
-    kotlin("jvm") version "1.8.20-Beta"
+    kotlin("jvm") version "1.8.20-RC"
 }
 
 group = "de.chojo"
