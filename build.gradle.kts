@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     // Logging
-    api("org.slf4j", "slf4j-api", "2.0.3")
+    api("org.slf4j", "slf4j-api", "2.0.6")
 
     api("com.fasterxml.jackson.core", "jackson-databind", "2.13.4")
     api("com.bucket4j", "bucket4j-core", "8.2.0")
