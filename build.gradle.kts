@@ -31,8 +31,8 @@ dependencies {
     api("org.jetbrains", "annotations", "23.0.0")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
     implementation(kotlin("stdlib-jdk8"))
 }
 
