@@ -1,10 +1,12 @@
 de.chojo.nexus
 de.chojo.nexus.entities
 de.chojo.nexus.requests
+de.chojo.nexus.requests.v1.assets
 de.chojo.nexus.requests.v1.search
 de.chojo.nexus.requests.v1.search.assets
 de.chojo.nexus.response.v1.search
 de.chojo.nexus.response.v1.search.assets
 de.chojo.nexus.routes.v1
+de.chojo.nexus.routes.v1.assets
 de.chojo.nexus.routes.v1.search
 de.chojo.nexus.routes.v1.search.assets
