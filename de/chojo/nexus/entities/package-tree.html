@@ -64,7 +64,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">de.chojo.nexus.entities.<a href="Checksum.html" class="type-name-link" title="class in de.chojo.nexus.entities">Checksum</a></li>
 <li class="circle">de.chojo.nexus.entities.<a href="ComponentXO.html" class="type-name-link" title="class in de.chojo.nexus.entities">ComponentXO</a></li>
 <li class="circle">de.chojo.nexus.entities.<a href="MavenMeta.html" class="type-name-link" title="class in de.chojo.nexus.entities">MavenMeta</a></li>
-<li class="circle">de.chojo.nexus.entities.<a href="PageAssetXO.html" class="type-name-link" title="class in de.chojo.nexus.entities">PageAssetXO</a> (implements de.chojo.nexus.entities.<a href="CollectionAdapter.html" title="interface in de.chojo.nexus.entities">CollectionAdapter</a>&lt;T&gt;)</li>
+<li class="circle">de.chojo.nexus.entities.<a href="PageAssetXO.html" class="type-name-link" title="class in de.chojo.nexus.entities">PageAssetXO</a> (implements de.chojo.nexus.entities.<a href="CollectionProvider.html" title="interface in de.chojo.nexus.entities">CollectionProvider</a>&lt;T&gt;)</li>
 <li class="circle">de.chojo.nexus.entities.<a href="PageComponentXO.html" class="type-name-link" title="class in de.chojo.nexus.entities">PageComponentXO</a> (implements de.chojo.nexus.entities.<a href="CollectionAdapter.html" title="interface in de.chojo.nexus.entities">CollectionAdapter</a>&lt;T&gt;)</li>
 </ul>
 </li>
@@ -75,13 +75,14 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Iterable.html" class="type-name-link external-link" title="class or interface in java.lang">Iterable</a>&lt;T&gt;
+<li class="circle">de.chojo.nexus.entities.<a href="CollectionProvider.html" class="type-name-link" title="interface in de.chojo.nexus.entities">CollectionProvider</a>&lt;T&gt;
 <ul>
-<li class="circle">java.util.<a href="https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/Collection.html" class="type-name-link external-link" title="class or interface in java.util">Collection</a>&lt;E&gt;
-<ul>
-<li class="circle">de.chojo.nexus.entities.<a href="CollectionAdapter.html" class="type-name-link" title="interface in de.chojo.nexus.entities">CollectionAdapter</a>&lt;T&gt;</li>
+<li class="circle">de.chojo.nexus.entities.<a href="CollectionAdapter.html" class="type-name-link" title="interface in de.chojo.nexus.entities">CollectionAdapter</a>&lt;T&gt; (also extends java.lang.<a href="https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;T&gt;)</li>
 </ul>
 </li>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Iterable.html" class="type-name-link external-link" title="class or interface in java.lang">Iterable</a>&lt;T&gt;
+<ul>
+<li class="circle">de.chojo.nexus.entities.<a href="CollectionAdapter.html" class="type-name-link" title="interface in de.chojo.nexus.entities">CollectionAdapter</a>&lt;T&gt; (also extends de.chojo.nexus.entities.<a href="CollectionProvider.html" title="interface in de.chojo.nexus.entities">CollectionProvider</a>&lt;T&gt;)</li>
 </ul>
 </li>
 </ul>
