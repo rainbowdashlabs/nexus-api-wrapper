@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -221,6 +223,25 @@ public class NexusRestImpl implements NexusRest {
         return dispatchAsync(() -> getBytesInternal(request(uri).GET().build()));
     }
 
+    public InputStream getStream(URI uri) {
+        return dispatch(() -> getOutputStreamInternal(request(uri).GET().build()));
+    }
+
+    public CompletableFuture<InputStream> getAsyncStream(URI uri) {
+        return dispatchAsync(() -> getOutputStreamInternal(request(uri).GET().build()));
+    }
+
+    private InputStream getOutputStreamInternal(HttpRequest request) {
+        try {
+            log.trace("Requesting {}", request.uri());
+            HttpResponse<InputStream> response = http().send(request, HttpResponse.BodyHandlers.ofInputStream());
+            log.trace("Received bytes");
+            handleStatusCode(response);
+            return response.body();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private byte[] getBytesInternal(HttpRequest request) {
         try {
             log.trace("Requesting {}", request.uri());

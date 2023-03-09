@@ -9,6 +9,7 @@ package de.chojo.nexus.routes.v1.assets;
 import de.chojo.nexus.NexusRestImpl;
 import de.chojo.nexus.requests.v1.assets.DeleteRequest;
 import de.chojo.nexus.requests.v1.assets.DownloadRequest;
+import de.chojo.nexus.requests.v1.assets.DownloadStreamRequest;
 import de.chojo.nexus.requests.v1.assets.DownloadToFileRequest;
 import de.chojo.nexus.requests.v1.assets.GetRequest;
 import de.chojo.nexus.requests.v1.assets.ListRequest;
@@ -30,6 +31,9 @@ public class Assets {
 
     public DownloadToFileRequest downloadToFile(String id) {
         return new DownloadToFileRequest(rest, id);
+    }
+    public DownloadStreamRequest downloadStream(String id) {
+        return new DownloadStreamRequest(rest, id);
     }
 
     public DeleteRequest delete(String id) {

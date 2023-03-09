@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.chojo.nexus.NexusRest;
 import de.chojo.nexus.requests.v1.assets.DownloadRequest;
+import de.chojo.nexus.requests.v1.assets.DownloadStreamRequest;
 import de.chojo.nexus.requests.v1.assets.DownloadToFileRequest;
 import org.jetbrains.annotations.Nullable;
 
@@ -197,5 +198,8 @@ public final class AssetXO {
 
     public DownloadToFileRequest downloadToFile() {
         return nexusRest.v1().assets().downloadToFile(id);
+    }
+    public DownloadStreamRequest downloadStream() {
+        return nexusRest.v1().assets().downloadStream(id);
     }
 }
