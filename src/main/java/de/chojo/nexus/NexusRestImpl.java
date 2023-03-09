@@ -225,7 +225,7 @@ public class NexusRestImpl implements NexusRest {
         try {
             log.trace("Requesting {}", request.uri());
             HttpResponse<byte[]> response = http().send(request, HttpResponse.BodyHandlers.ofByteArray());
-            log.trace("Received\n{}", response.body());
+            log.trace("Received bytes");
             handleStatusCode(response);
             return response.body();
         } catch (IOException | InterruptedException e) {
@@ -246,8 +246,8 @@ public class NexusRestImpl implements NexusRest {
             path = path == null ? Files.createTempFile("nexus", "file") : path;
             log.trace("Requesting {}", request.uri());
             HttpResponse<Path> response = http().send(request, HttpResponse.BodyHandlers.ofFile(path));
-            log.trace("Received\n{}", response.body());
             handleStatusCode(response);
+            log.trace("Received bytes");
             return response.body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
