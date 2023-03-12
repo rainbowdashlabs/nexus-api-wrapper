@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ListRequest extends RequestBuilder<PageAssetXO> {
     public ListRequest(NexusRestImpl rest, String repository) {
-        super(rest, PageAssetXO.class);
+        super(rest);
         path("v1", "assets");
         parameter("repository", repository);
     }
@@ -26,11 +26,11 @@ public class ListRequest extends RequestBuilder<PageAssetXO> {
 
     @Override
     public CompletableFuture<PageAssetXO> queue() {
-        return queueGetAndMap();
+        return rest.getAsyncAndMap(uri(), PageAssetXO.class);
     }
 
     @Override
     public PageAssetXO complete() {
-        return completeGetAndMap();
+        return rest.getAndMap(uri(), PageAssetXO.class);
     }
 }

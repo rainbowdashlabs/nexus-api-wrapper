@@ -17,7 +17,7 @@ public class DownloadRequest extends RequestBuilder<byte[]> {
     private final String id;
 
     public DownloadRequest(NexusRestImpl rest, String id) {
-        super(rest, byte[].class);
+        super(rest);
         this.id = id;
     }
 

@@ -20,7 +20,7 @@ public class DownloadToFileRequest extends RequestBuilder<Path> {
     private Path path;
 
     public DownloadToFileRequest(NexusRestImpl rest, String id) {
-        super(rest, Path.class);
+        super(rest);
         this.id = id;
     }
 

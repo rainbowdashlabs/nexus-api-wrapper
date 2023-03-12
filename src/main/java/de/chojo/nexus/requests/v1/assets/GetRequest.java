@@ -14,17 +14,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class GetRequest extends RequestBuilder<AssetXO> {
     public GetRequest(NexusRestImpl rest, String id) {
-        super(rest, AssetXO.class);
+        super(rest);
         path("v1", "assets", id);
     }
 
     @Override
     public CompletableFuture<AssetXO> queue() {
-        return queueGetAndMap();
+        return rest.getAsyncAndMap(uri(), AssetXO.class);
     }
 
     @Override
     public AssetXO complete() {
-        return completeGetAndMap();
+        return rest.getAndMap(uri(), AssetXO.class);
     }
 }

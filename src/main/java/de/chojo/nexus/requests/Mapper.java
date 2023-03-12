@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.InjectableValues;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -35,11 +36,13 @@ public final class Mapper {
         InjectableValues.Std iv = new InjectableValues.Std();
         iv.addValue(NexusRest.class, nexusRest);
         //iv.addValue(NexusRestImpl.class, nexusRest);
-        return new JsonMapper()
-                .setInjectableValues(iv)
-                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NONE)
+        return JsonMapper.builder()
+                .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .build()
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NONE)
+                .setInjectableValues(iv)
                 .registerModule(module)
                 .registerModule(new JavaTimeModule());
     }

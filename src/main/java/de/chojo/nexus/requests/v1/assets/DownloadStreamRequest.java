@@ -19,7 +19,7 @@ public class DownloadStreamRequest extends RequestBuilder<InputStream> {
     private final String id;
 
     public DownloadStreamRequest(NexusRestImpl rest, String id) {
-        super(rest, InputStream.class);
+        super(rest);
         this.id = id;
     }
 

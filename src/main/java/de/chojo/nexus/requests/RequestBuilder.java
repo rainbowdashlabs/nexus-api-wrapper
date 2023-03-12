@@ -26,33 +26,17 @@ public abstract class RequestBuilder<T> implements Request<T> {
     private static final Logger log = getLogger(RequestBuilder.class);
     protected final NexusRestImpl rest;
     private final URIBuilder uriBuilder;
-    private final Class<T> result;
-    private final Consumer<T> postRetrievalHook;
 
     /**
      * Create a new request builder
      *
      * @param rest   rest client
-     * @param result result of the request
      */
-    public RequestBuilder(NexusRestImpl rest, Class<T> result) {
-        this(rest, result, r -> {
-        });
-    }
-
-    /**
-     * Creates a new request builder
-     *
-     * @param rest              rest client
-     * @param result            result of the request
-     * @param postRetrievalHook modification of the result
-     */
-    public RequestBuilder(NexusRestImpl rest, Class<T> result, Consumer<T> postRetrievalHook) {
+    public RequestBuilder(NexusRestImpl rest) {
         this.rest = rest;
         uriBuilder = rest.uri();
-        this.result = result;
-        this.postRetrievalHook = postRetrievalHook;
     }
+
 
     private URIBuilder uriBuilder() {
         return uriBuilder;
@@ -98,20 +82,6 @@ public abstract class RequestBuilder<T> implements Request<T> {
 
     @Override
     public abstract CompletableFuture<T> queue();
-
-    protected CompletableFuture<T> queueGetAndMap() {
-        return rest.getAsyncAndMap(uri(), this.result)
-                .thenApply(res -> {
-                    postRetrievalHook.accept(res);
-                    return res;
-                });
-    }
-
-    protected T completeGetAndMap() {
-        T result = rest.getAndMap(uri(), this.result);
-        postRetrievalHook.accept(result);
-        return result;
-    }
 
     @Override
     public abstract T complete();

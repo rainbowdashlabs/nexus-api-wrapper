@@ -15,7 +15,7 @@ public class DeleteRequest extends RequestBuilder<Void> {
     private final String id;
 
     public DeleteRequest(NexusRestImpl rest, String id) {
-        super(rest, Void.class);
+        super(rest);
         this.id = id;
         path("v1", "assets", id);
     }

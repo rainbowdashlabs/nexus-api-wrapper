@@ -7,6 +7,7 @@
 package de.chojo.nexus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import de.chojo.nexus.requests.Buckets;
 import de.chojo.nexus.requests.Mapper;
 import de.chojo.nexus.routes.v1.V1;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -25,6 +25,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -137,8 +139,7 @@ public class NexusRestImpl implements NexusRest {
      * @return future with result
      */
     public <T> CompletableFuture<T> getAsyncAndMap(URI uri, Class<T> result) {
-        HttpRequest request = request(uri).GET().build();
-        return getAsyncAndMap(request, result);
+        return dispatchAsync(() -> getAndMapInternal(request(uri).GET().build(), result));
     }
 
     /**
@@ -150,32 +151,7 @@ public class NexusRestImpl implements NexusRest {
      * @return result
      */
     public <T> T getAndMap(URI uri, Class<T> result) {
-        HttpRequest request = request(uri).GET().build();
-        return getAndMap(request, result);
-    }
-
-    /**
-     * Send an asynchronous request and map the result body
-     *
-     * @param request request
-     * @param result  result class
-     * @param <T>     result type
-     * @return future with result
-     */
-    public <T> CompletableFuture<T> getAsyncAndMap(HttpRequest request, Class<T> result) {
-        return dispatchAsync(() -> getAndMapInternal(request, result));
-    }
-
-    /**
-     * Send a request and map the result body
-     *
-     * @param request request
-     * @param result  result class
-     * @param <T>     result type
-     * @return result
-     */
-    public <T> T getAndMap(HttpRequest request, Class<T> result) {
-        return dispatch(() -> getAndMapInternal(request, result));
+        return dispatch(() -> getAndMapInternal(request(uri).GET().build(), result));
     }
 
     public <T> T dispatch(Callable<T> callable) {
@@ -215,6 +191,43 @@ public class NexusRestImpl implements NexusRest {
         }
     }
 
+    /**
+     * Send an asynchronous request to the uri and map the result body
+     *
+     * @param uri    uri
+     * @param result result class
+     * @param <T>    result type
+     * @return future with result
+     */
+    public <T> CompletableFuture<List<T>> getAsyncAndMapList(URI uri, Class<T> result) {
+        return dispatchAsync(() -> getAndMapListInternal(request(uri).GET().build(), result));
+    }
+
+    /**
+     * Send a request and map the result body
+     *
+     * @param uri    uri
+     * @param result result class
+     * @param <T>    result type
+     * @return result
+     */
+    public <T> List<T> getAndMapList(URI uri, Class<T> result) {
+        return dispatch(() -> getAndMapListInternal(request(uri).GET().build(), result));
+    }
+
+    private <T> List<T> getAndMapListInternal(HttpRequest request, Class<T> result) {
+        try {
+            log.trace("Requesting {}", request.uri());
+            HttpResponse<String> response = http().send(request, HttpResponse.BodyHandlers.ofString());
+            log.trace("Received\n{}", response.body());
+            handleStatusCode(response);
+            CollectionType type = objectMapper().getTypeFactory().constructCollectionType(ArrayList.class, result);
+            return objectMapper().readValue(response.body(), type);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public byte[] getBytes(URI uri) {
         return dispatch(() -> getBytesInternal(request(uri).GET().build()));
     }
@@ -242,6 +255,7 @@ public class NexusRestImpl implements NexusRest {
             throw new RuntimeException(e);
         }
     }
+
     private byte[] getBytesInternal(HttpRequest request) {
         try {
             log.trace("Requesting {}", request.uri());

@@ -13,17 +13,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class SearchRequest extends ASearchRequest<SearchRequest, PageComponentXO> {
     public SearchRequest(NexusRestImpl rest) {
-        super(rest, PageComponentXO.class);
+        super(rest);
         path("v1", "search");
     }
 
     @Override
     public CompletableFuture<PageComponentXO> queue() {
-        return queueGetAndMap();
+        return rest.getAsyncAndMap(uri(), PageComponentXO.class);
     }
 
     @Override
     public PageComponentXO complete() {
-        return completeGetAndMap();
+        return rest.getAndMap(uri(), PageComponentXO.class);
     }
 }

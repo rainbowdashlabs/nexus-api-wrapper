@@ -12,8 +12,8 @@ import de.chojo.nexus.requests.RequestBuilder;
 import java.util.Locale;
 
 public abstract class ASearchRequest<Self extends ASearchRequest<?, T>, T> extends RequestBuilder<T> {
-    public ASearchRequest(NexusRestImpl rest, Class<T> result) {
-        super(rest, result);
+    public ASearchRequest(NexusRestImpl rest) {
+        super(rest);
     }
 
     public Self continuationToken(String token) {
