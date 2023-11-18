@@ -2,8 +2,8 @@ plugins {
     id("java")
     `java-library`
     `maven-publish`
-    id("com.diffplug.spotless") version "6.19.0"
-    id("de.chojo.publishdata") version "1.2.4"
+    id("com.diffplug.spotless") version "6.22.0"
+    id("de.chojo.publishdata") version "1.2.5"
 }
 
 group = "de.chojo"
@@ -18,19 +18,18 @@ dependencies {
     // Logging
     api("org.slf4j", "slf4j-api", "2.0.7")
 
-    api("com.fasterxml.jackson.core", "jackson-databind", "2.15.1")
-    api("com.bucket4j", "bucket4j-core", "8.3.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.15.1")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.1")
+    api("com.fasterxml.jackson.core", "jackson-databind", "2.16.0")
+    api("com.bucket4j", "bucket4j-core", "8.7.0")
+    api("com.fasterxml.jackson.core:jackson-databind:2.16.0")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0")
     api("org.apache.httpcomponents.client5", "httpclient5", "5.2.1")
 
     // code
-    api("org.jetbrains", "annotations", "24.0.1")
+    api("org.jetbrains", "annotations", "24.1.0")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
-    implementation(kotlin("stdlib-jdk8"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 }
 
 spotless {
