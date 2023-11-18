@@ -1,12 +1,9 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("java")
     `java-library`
     `maven-publish`
     id("com.diffplug.spotless") version "6.22.0"
     id("de.chojo.publishdata") version "1.2.5"
-    kotlin("jvm") version "1.8.21"
 }
 
 group = "de.chojo"
@@ -33,7 +30,6 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 spotless {
@@ -90,12 +86,4 @@ tasks {
             events("passed", "skipped", "failed")
         }
     }
-}
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
 }
