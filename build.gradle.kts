@@ -22,7 +22,7 @@ dependencies {
     api("com.bucket4j", "bucket4j-core", "8.10.1")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
-    api("org.apache.httpcomponents.client5", "httpclient5", "5.2.1")
+    api("org.apache.httpcomponents.client5", "httpclient5", "5.3.1")
 
     // code
     api("org.jetbrains", "annotations", "24.1.0")
