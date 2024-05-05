@@ -18,10 +18,10 @@ dependencies {
     // Logging
     api("org.slf4j", "slf4j-api", "2.0.11")
 
-    api("com.fasterxml.jackson.core", "jackson-databind", "2.17.0")
+    api("com.fasterxml.jackson.core", "jackson-databind", "2.17.1")
     api("com.bucket4j", "bucket4j-core", "8.10.1")
-    api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
+    api("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     api("org.apache.httpcomponents.client5", "httpclient5", "5.2.1")
 
     // code
