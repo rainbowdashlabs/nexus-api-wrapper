@@ -28,8 +28,8 @@ dependencies {
     api("org.jetbrains", "annotations", "26.0.1")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
 }
 
 spotless {
