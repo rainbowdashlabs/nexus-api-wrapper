@@ -2,7 +2,7 @@ plugins {
     id("java")
     `java-library`
     `maven-publish`
-    id("com.diffplug.spotless") version "7.0.1"
+    id("com.diffplug.spotless") version "7.0.2"
     id("de.chojo.publishdata") version "1.4.0"
 }
 
