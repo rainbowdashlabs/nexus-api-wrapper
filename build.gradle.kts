@@ -2,8 +2,8 @@ plugins {
     id("java")
     `java-library`
     `maven-publish`
-    id("com.diffplug.spotless") version "7.2.1"
-    id("de.chojo.publishdata") version "1.4.0"
+    id("com.diffplug.spotless") version "8.10.4"
+    id("de.chojo.publishdata") version "2.0.0"
 }
 
 group = "de.chojo"
@@ -28,8 +28,8 @@ dependencies {
     api("org.jetbrains", "annotations", "26.1.0")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.3")
 }
 
 spotless {
