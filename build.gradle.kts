@@ -16,20 +16,20 @@ repositories {
 
 dependencies {
     // Logging
-    api("org.slf4j", "slf4j-api", "2.0.17")
+    api("org.slf4j", "slf4j-api", "2.0.20")
 
-    api("com.fasterxml.jackson.core", "jackson-databind", "2.21.2")
+    api("com.fasterxml.jackson.core", "jackson-databind", "2.22.4")
     api("com.bucket4j", "bucket4j-core", "8.10.1")
-    api("com.fasterxml.jackson.core:jackson-databind:2.21.2")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")
-    api("org.apache.httpcomponents.client5", "httpclient5", "5.6")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.4")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.4")
+    api("org.apache.httpcomponents.client5", "httpclient5", "5.6.5")
 
     // code
     api("org.jetbrains", "annotations", "26.1.0")
     api("com.google.code.findbugs", "jsr305", "3.0.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.14.4")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.14.4")
 }
 
 spotless {
