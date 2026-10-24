@@ -28,8 +28,13 @@ dependencies {
 
 spotless {
     java {
-        licenseHeaderFile(rootProject.file("HEADER.txt"))
         target("src/**/*.java")
+        licenseHeaderFile(rootProject.file("HEADER.txt"))
+        palantirJavaFormat(libs.versions.palantir.get()).formatJavadoc(false)
+        removeUnusedImports()
+        importOrder("", "java", "javax", "\\#")
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }
 
