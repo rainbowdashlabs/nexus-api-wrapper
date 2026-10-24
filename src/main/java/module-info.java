@@ -9,10 +9,9 @@
  */
 module de.chojo.nexus {
     requires transitive java.net.http;
-    requires transitive com.fasterxml.jackson.databind;
+    requires transitive tools.jackson.databind;
     requires transitive io.github.bucket4j.core;
     requires transitive org.apache.httpcomponents.core5.httpcore5;
-    requires com.fasterxml.jackson.datatype.jsr310;
     requires org.slf4j;
     requires static transitive org.jetbrains.annotations;
 
@@ -30,5 +29,5 @@ module de.chojo.nexus {
     exports de.chojo.nexus.routes.v1.search.assets;
 
     opens de.chojo.nexus.entities to
-            com.fasterxml.jackson.databind;
+            tools.jackson.databind;
 }

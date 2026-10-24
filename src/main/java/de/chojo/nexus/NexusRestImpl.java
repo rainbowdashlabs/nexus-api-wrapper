@@ -6,8 +6,6 @@
 
 package de.chojo.nexus;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import de.chojo.nexus.requests.Buckets;
 import de.chojo.nexus.requests.Mapper;
 import de.chojo.nexus.routes.v1.V1;
@@ -15,6 +13,8 @@ import io.github.bucket4j.Bucket;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.type.CollectionType;
 
 import java.io.IOException;
 import java.io.InputStream;

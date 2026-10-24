@@ -31,7 +31,6 @@ tasks.withType<Javadoc>().configureEach {
 dependencies {
     api(platform(libs.jackson.bom))
     api(libs.jackson.databind)
-    api(libs.jackson.jsr310)
     api(libs.bucket4j)
     api(libs.httpcore5)
     api(libs.slf4j.api)
