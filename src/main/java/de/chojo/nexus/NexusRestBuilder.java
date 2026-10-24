@@ -9,6 +9,7 @@ package de.chojo.nexus;
 import org.jetbrains.annotations.CheckReturnValue;
 
 import java.net.Authenticator;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -30,10 +31,25 @@ public class NexusRestBuilder {
             .connectTimeout(Duration.ofSeconds(60));
     private ScheduledExecutorService executorService;
     private final Map<String, String> header = new HashMap<>();
-    private final String host;
+    private final URI baseUrl;
 
+    /**
+     * Create a builder for a Nexus reachable at {@code https://<host>}.
+     *
+     * @param host host name, optionally with a port
+     */
     public NexusRestBuilder(String host) {
-        this.host = host;
+        this(URI.create("https://" + host));
+    }
+
+    /**
+     * Create a builder for a Nexus at the given base url, like {@code http://localhost:8081} or
+     * {@code https://example.com/nexus}. The REST API is expected under {@code <baseUrl>/service/rest}.
+     *
+     * @param baseUrl base url of the Nexus
+     */
+    public NexusRestBuilder(URI baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     /**
@@ -111,7 +127,7 @@ public class NexusRestBuilder {
         return new NexusRestImpl(
                 http != null ? http : httpBuilder.build(),
                 executorService != null ? executorService : defaultExecutor(),
-                host,
+                baseUrl,
                 header);
     }
 

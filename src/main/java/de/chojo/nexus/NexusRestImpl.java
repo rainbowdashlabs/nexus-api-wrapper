@@ -48,7 +48,7 @@ public class NexusRestImpl implements NexusRest {
     private final Bucket bucket = Buckets.newDefaultBucket();
     private final HttpClient http;
     private final ObjectMapper objectMapper;
-    private final String host;
+    private final URI baseUrl;
     private final Map<String, String> header;
     private final ScheduledExecutorService executorService;
     private final V1 v1;
@@ -58,14 +58,14 @@ public class NexusRestImpl implements NexusRest {
      *
      * @param http            http client
      * @param executorService executor service for asynchronous requests
-     * @param host            host of the nexus
+     * @param baseUrl         base url of the nexus, without {@code /service/rest}
      * @param header          headers sent with every request
      */
     public NexusRestImpl(
-            HttpClient http, ScheduledExecutorService executorService, String host, Map<String, String> header) {
+            HttpClient http, ScheduledExecutorService executorService, URI baseUrl, Map<String, String> header) {
         this.http = http;
         this.executorService = executorService;
-        this.host = host;
+        this.baseUrl = withoutTrailingSlash(baseUrl);
         this.header = Map.copyOf(header);
         this.objectMapper = Mapper.create(this);
         this.v1 = new V1(this);
@@ -86,7 +86,7 @@ public class NexusRestImpl implements NexusRest {
      * @return new uri builder
      */
     public URIBuilder uri() {
-        return new URIBuilder().setScheme("https").setHost(host).appendPathSegments("service", "rest");
+        return new URIBuilder(baseUrl).appendPathSegments("service", "rest");
     }
 
     /**
@@ -368,6 +368,12 @@ public class NexusRestImpl implements NexusRest {
 
     private static boolean failed(HttpResponse<?> response) {
         return response.statusCode() < 200 || response.statusCode() >= 300;
+    }
+
+    private static URI withoutTrailingSlash(URI uri) {
+        String path = uri.getPath();
+        if (path == null || !path.endsWith("/")) return uri;
+        return uri.resolve(path.substring(0, path.length() - 1));
     }
 
     private static URI build(URIBuilder uri) {
