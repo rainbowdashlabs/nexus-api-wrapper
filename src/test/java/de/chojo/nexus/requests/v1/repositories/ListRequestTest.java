@@ -10,10 +10,12 @@ import de.chojo.nexus.NexusRest;
 import de.chojo.nexus.entities.RepositoryXO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@Tag("live")
 class ListRequestTest {
     NexusRest rest;
     ListRequest request;

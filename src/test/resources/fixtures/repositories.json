@@ -1,0 +1,29 @@
+[
+  {
+    "name": "maven-releases",
+    "format": "maven2",
+    "type": "hosted",
+    "url": "https://eldonexus.de/repository/maven-releases",
+    "online": true,
+    "size": 1136706311,
+    "attributes": {}
+  },
+  {
+    "name": "maven-public",
+    "format": "maven2",
+    "type": "group",
+    "url": "https://eldonexus.de/repository/maven-public",
+    "online": true,
+    "size": 150284,
+    "attributes": {}
+  },
+  {
+    "name": "maven-dev",
+    "format": "maven2",
+    "type": "hosted",
+    "url": "https://eldonexus.de/repository/maven-dev",
+    "online": true,
+    "size": 345091753,
+    "attributes": {}
+  }
+]

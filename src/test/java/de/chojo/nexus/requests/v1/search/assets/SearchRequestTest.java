@@ -10,8 +10,10 @@ import de.chojo.nexus.NexusRest;
 import de.chojo.nexus.entities.PageAssetXO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+@Tag("live")
 class SearchRequestTest {
 
     NexusRest rest;
