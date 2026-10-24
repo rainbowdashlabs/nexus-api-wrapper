@@ -25,6 +25,6 @@ public final class Buckets {
      * @return bucket
      */
     public static Bucket newDefaultBucket() {
-        return Bucket.builder().addLimit(Bandwidth.simple(50, Duration.ofSeconds(2))).build();
+        return Bucket.builder().addLimit(Bandwidth.builder().capacity(50).refillGreedy(50, Duration.ofSeconds(2)).build()).build();
     }
 }

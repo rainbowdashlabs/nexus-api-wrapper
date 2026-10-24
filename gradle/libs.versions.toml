@@ -1,0 +1,22 @@
+[versions]
+palantir = "2.102.0"
+publishdata = "1.1.0"
+spotless = "8.10.4"
+jackson = "2.22.4"
+junit = "6.1.3"
+
+[libraries]
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+bucket4j = { module = "com.bucket4j:bucket4j_jdk17-core", version = "8.21.0" }
+httpcore5 = { module = "org.apache.httpcomponents.core5:httpcore5", version = "5.4.4" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.0.20" }
+annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[plugins]
+publishdata = { id = "de.chojo.publishdata", version.ref = "publishdata" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

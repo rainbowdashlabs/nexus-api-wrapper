@@ -6,7 +6,7 @@
 
 package de.chojo.nexus;
 
-import javax.annotation.CheckReturnValue;
+import org.jetbrains.annotations.CheckReturnValue;
 import java.net.Authenticator;
 import java.net.http.HttpClient;
 import java.time.Duration;

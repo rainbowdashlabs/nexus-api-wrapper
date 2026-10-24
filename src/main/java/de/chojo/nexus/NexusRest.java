@@ -8,7 +8,7 @@ package de.chojo.nexus;
 
 import de.chojo.nexus.routes.v1.V1;
 
-import javax.annotation.CheckReturnValue;
+import org.jetbrains.annotations.CheckReturnValue;
 
 /**
  * Class to access the nexus api.

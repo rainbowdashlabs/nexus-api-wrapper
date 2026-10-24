@@ -7,28 +7,24 @@
 package de.chojo.nexus.requests.v1.assets;
 
 import de.chojo.nexus.NexusRest;
+import de.chojo.nexus.entities.AssetXO;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DownloadToFileRequestTest {
-    NexusRest rest;
-    DownloadToFileRequest request;
-
-    @BeforeEach
-    void setUp() {
-        rest = NexusRest.builder("eldonexus.de").build();
-        // Download the first asset we can find
-        request = rest.v1().assets().downloadToFile("bWF2ZW4tcmVsZWFzZXM6MTNiMjllNDQ5ZjBlM2I4ZGE0ZWFlMWFiNjI0MzhiZTU");
-    }
-
     @Test
-    void complete() {
-        Path complete = request.complete();
-        Assertions.assertTrue(complete.toFile().exists());
+    void complete() throws IOException {
+        NexusRest rest = NexusRest.builder("eldonexus.de").build();
+        AssetXO asset = LiveAssets.jar(rest);
+        Path file = rest.v1().assets().downloadToFile(asset.id()).complete();
+        try {
+            Assertions.assertEquals(asset.checksum().md5(), LiveAssets.md5(Files.readAllBytes(file)));
+        } finally {
+            Files.deleteIfExists(file);
+        }
     }
 }
