@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -11,12 +11,12 @@ import de.chojo.nexus.requests.v1.search.SearchRequest;
 import de.chojo.nexus.routes.v1.search.assets.Assets;
 
 public class Search {
-    Assets assets ;
+    Assets assets;
     private final NexusRestImpl rest;
 
     public Search(NexusRestImpl rest) {
         this.rest = rest;
-        assets= new Assets(rest);
+        assets = new Assets(rest);
     }
 
     public SearchRequest search() {

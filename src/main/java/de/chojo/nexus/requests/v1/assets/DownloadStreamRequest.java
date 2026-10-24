@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -11,7 +11,6 @@ import de.chojo.nexus.entities.AssetXO;
 import de.chojo.nexus.requests.RequestBuilder;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,9 +24,7 @@ public class DownloadStreamRequest extends RequestBuilder<InputStream> {
 
     @Override
     public CompletableFuture<InputStream> queue() {
-        return rest.v1().assets().get(id)
-                .queue()
-                .thenApply(asset -> rest.getStream(URI.create(asset.downloadUrl())));
+        return rest.v1().assets().get(id).queue().thenApply(asset -> rest.getStream(URI.create(asset.downloadUrl())));
     }
 
     @Override

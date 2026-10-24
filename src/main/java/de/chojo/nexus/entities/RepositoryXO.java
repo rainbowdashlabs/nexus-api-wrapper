@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -17,6 +17,7 @@ import java.util.Objects;
 public final class RepositoryXO {
     @JacksonInject
     private NexusRest nexusRest;
+
     private final String name;
     private final String format;
     private final RepositoryType type;
@@ -24,11 +25,12 @@ public final class RepositoryXO {
     private final Map<String, Object> attributes;
 
     @JsonCreator
-    public RepositoryXO(@JsonProperty("name") String name,
-                        @JsonProperty("format") String format,
-                        @JsonProperty("type") RepositoryType type,
-                        @JsonProperty("url") String url,
-                        @JsonProperty("attributes") Map<String, Object> attributes) {
+    public RepositoryXO(
+            @JsonProperty("name") String name,
+            @JsonProperty("format") String format,
+            @JsonProperty("type") RepositoryType type,
+            @JsonProperty("url") String url,
+            @JsonProperty("attributes") Map<String, Object> attributes) {
         this.name = name;
         this.format = format;
         this.type = type;
@@ -61,11 +63,11 @@ public final class RepositoryXO {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (RepositoryXO) obj;
-        return Objects.equals(this.name, that.name) &&
-               Objects.equals(this.format, that.format) &&
-               Objects.equals(this.type, that.type) &&
-               Objects.equals(this.url, that.url) &&
-               Objects.equals(this.attributes, that.attributes);
+        return Objects.equals(this.name, that.name)
+                && Objects.equals(this.format, that.format)
+                && Objects.equals(this.type, that.type)
+                && Objects.equals(this.url, that.url)
+                && Objects.equals(this.attributes, that.attributes);
     }
 
     @Override
@@ -75,12 +77,11 @@ public final class RepositoryXO {
 
     @Override
     public String toString() {
-        return "RepositoryXO[" +
-               "name=" + name + ", " +
-               "format=" + format + ", " +
-               "type=" + type + ", " +
-               "url=" + url + ", " +
-               "attributes=" + attributes + ']';
+        return "RepositoryXO[" + "name="
+                + name + ", " + "format="
+                + format + ", " + "type="
+                + type + ", " + "url="
+                + url + ", " + "attributes="
+                + attributes + ']';
     }
-
 }

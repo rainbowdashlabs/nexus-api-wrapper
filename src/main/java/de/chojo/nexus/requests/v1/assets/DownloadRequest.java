@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -23,9 +23,7 @@ public class DownloadRequest extends RequestBuilder<byte[]> {
 
     @Override
     public CompletableFuture<byte[]> queue() {
-        return rest.v1().assets().get(id)
-                .queue()
-                .thenApply(asset -> rest.getBytes(URI.create(asset.downloadUrl())));
+        return rest.v1().assets().get(id).queue().thenApply(asset -> rest.getBytes(URI.create(asset.downloadUrl())));
     }
 
     @Override

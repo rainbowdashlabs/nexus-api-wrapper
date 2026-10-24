@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -35,7 +35,7 @@ public final class Mapper {
         SimpleModule module = new SimpleModule();
         InjectableValues.Std iv = new InjectableValues.Std();
         iv.addValue(NexusRest.class, nexusRest);
-        //iv.addValue(NexusRestImpl.class, nexusRest);
+        // iv.addValue(NexusRestImpl.class, nexusRest);
         return JsonMapper.builder()
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
