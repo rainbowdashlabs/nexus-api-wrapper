@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class SearchRequest extends ASearchRequest<SearchRequest, PageAssetXO> {
     public SearchRequest(NexusRestImpl rest) {
         super(rest);
-        path("v1","search","assets");
+        path("v1", "search", "assets");
     }
 
     @Override

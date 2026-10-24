@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -45,6 +45,7 @@ public interface CollectionAdapter<T> extends Iterable<T>, CollectionProvider<T>
     default Stream<T> stream() {
         return collection().stream();
     }
+
     default Stream<T> parallelStream() {
         return collection().parallelStream();
     }

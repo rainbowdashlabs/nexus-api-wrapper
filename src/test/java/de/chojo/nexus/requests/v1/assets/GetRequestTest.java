@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -16,6 +16,7 @@ class GetRequestTest {
     void complete() {
         NexusRest rest = NexusRest.builder("eldonexus.de").build();
         AssetXO asset = LiveAssets.jar(rest);
-        Assertions.assertEquals(asset.id(), rest.v1().assets().get(asset.id()).complete().id());
+        Assertions.assertEquals(
+                asset.id(), rest.v1().assets().get(asset.id()).complete().id());
     }
 }

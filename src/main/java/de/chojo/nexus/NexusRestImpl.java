@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -54,7 +54,8 @@ public class NexusRestImpl implements NexusRest {
      * @param executorService executor service
      * @param header
      */
-    public NexusRestImpl(HttpClient http, ScheduledExecutorService executorService, String host, Map<String, String> header) {
+    public NexusRestImpl(
+            HttpClient http, ScheduledExecutorService executorService, String host, Map<String, String> header) {
         this.http = http;
         this.executorService = executorService;
         this.host = host;
@@ -165,18 +166,20 @@ public class NexusRestImpl implements NexusRest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public <T> CompletableFuture<T> dispatchAsync(Callable<T> callable) {
-        return bucket.asScheduler().consume(1, executorService)
-                .thenApplyAsync(v -> {
-                    try {
-                        return callable.call();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }, executorService);
+        return bucket.asScheduler()
+                .consume(1, executorService)
+                .thenApplyAsync(
+                        v -> {
+                            try {
+                                return callable.call();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        },
+                        executorService);
     }
 
     private <T> T getAndMapInternal(HttpRequest request, Class<T> result) {

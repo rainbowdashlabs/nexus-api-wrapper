@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -31,7 +31,9 @@ public class DownloadToFileRequest extends RequestBuilder<Path> {
 
     @Override
     public CompletableFuture<Path> queue() {
-        return rest.v1().assets().get(id)
+        return rest.v1()
+                .assets()
+                .get(id)
                 .queue()
                 .thenApply(asset -> rest.getToFile(URI.create(asset.downloadUrl()), path));
     }

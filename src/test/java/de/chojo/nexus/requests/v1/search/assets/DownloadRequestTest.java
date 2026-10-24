@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -22,7 +22,14 @@ class DownloadRequestTest {
     void setUp() {
         rest = NexusRest.builder("eldonexus.de").build();
         // Download the first asset we can find
-        request = rest.v1().search().assets().download().repository("maven-releases").sort(Sort.NAME).direction(Direction.ASC).mavenExtension("jar");
+        request = rest.v1()
+                .search()
+                .assets()
+                .download()
+                .repository("maven-releases")
+                .sort(Sort.NAME)
+                .direction(Direction.ASC)
+                .mavenExtension("jar");
     }
 
     @Test

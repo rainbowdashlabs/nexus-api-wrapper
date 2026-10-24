@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -20,7 +20,12 @@ class SearchRequestTest {
     @BeforeEach
     void setUp() {
         rest = NexusRest.builder("eldonexus.de").build();
-        request = rest.v1().search().assets().search().repository("maven-releases").mavenExtension("jar");
+        request = rest.v1()
+                .search()
+                .assets()
+                .search()
+                .repository("maven-releases")
+                .mavenExtension("jar");
     }
 
     @Test

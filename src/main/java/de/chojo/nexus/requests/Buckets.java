@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -25,6 +25,11 @@ public final class Buckets {
      * @return bucket
      */
     public static Bucket newDefaultBucket() {
-        return Bucket.builder().addLimit(Bandwidth.builder().capacity(50).refillGreedy(50, Duration.ofSeconds(2)).build()).build();
+        return Bucket.builder()
+                .addLimit(Bandwidth.builder()
+                        .capacity(50)
+                        .refillGreedy(50, Duration.ofSeconds(2))
+                        .build())
+                .build();
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -36,7 +35,6 @@ public abstract class RequestBuilder<T> implements Request<T> {
         this.rest = rest;
         uriBuilder = rest.uri();
     }
-
 
     private URIBuilder uriBuilder() {
         return uriBuilder;

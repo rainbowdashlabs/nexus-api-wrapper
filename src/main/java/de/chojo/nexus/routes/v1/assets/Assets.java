@@ -1,5 +1,5 @@
 /*
- *     SPDX-License-Identifier: AGPL-3.0-only
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
  *
  *     Copyright (C) RainbowDashLabs and Contributor
  */
@@ -32,6 +32,7 @@ public class Assets {
     public DownloadToFileRequest downloadToFile(String id) {
         return new DownloadToFileRequest(rest, id);
     }
+
     public DownloadStreamRequest downloadStream(String id) {
         return new DownloadStreamRequest(rest, id);
     }
