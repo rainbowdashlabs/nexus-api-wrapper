@@ -31,12 +31,31 @@ its file, so it counts twice.
 
 ## Errors
 
-When Nexus answers with a status outside 200 to 299, the request fails with a `RuntimeException` whose message is
-the response body. Network errors and broken JSON also end up as a `RuntimeException`, with the original exception as
-the cause.
+When Nexus answers with a status outside 200 to 299, the request fails with a `NexusException`:
 
-- `complete()` throws the exception, wrapped in one more `RuntimeException`.
-- `queue()` completes the future exceptionally.
+```java
+try {
+    nexus.v1().assets().get(id).complete();
+} catch (NexusException e) {
+    System.out.println(e.statusCode() + " " + e.body());
+}
+```
 
-The HTTP status code is not part of the exception. Nexus usually puts it into the body, for example
-`"status-code" : 422`.
+| Method | Content |
+|---|---|
+| `statusCode()` | the HTTP status code, like `404` or `422` |
+| `body()` | the body of the answer, often JSON with details, empty when there was none |
+| `uri()` | the requested URI |
+
+Other failures:
+
+- A network error is an `UncheckedIOException`.
+- A body that does not fit the expected type is a Jackson `JacksonException`.
+- An interrupt while waiting for Nexus or the rate limit is an `IllegalStateException`, and the thread keeps its
+  interrupt flag.
+
+`complete()` throws these directly. `queue()` completes the future exceptionally; `join()` then throws a
+`CompletionException` with the exception as its cause.
+
+A failed stream download closes the stream, and a failed file download deletes the file, before the exception is
+thrown. The body of the error answer is in `body()`.

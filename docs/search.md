@@ -59,6 +59,7 @@ then it takes the first one. If nothing matches, it answers with 404.
 ## Parameters
 
 Every parameter is a method on the search request. Values are sent as they are; Nexus decides how to match them.
+Calling a method again replaces its value.
 
 | Method | Nexus parameter |
 |---|---|
@@ -93,13 +94,13 @@ Terraform ones). The client does not offer them yet.
 ## Pages
 
 Nexus returns results in pages. The page has a `continuationToken()` while there are more results, and `null` on the
-last page. Build a new request for every page and pass the token of the previous one:
+last page. Pass the token of the previous page to get the next one:
 
 ```java
+SearchRequest request = nexus.v1().search().assets().search().repository("maven-releases");
 List<AssetXO> all = new ArrayList<>();
 String token = null;
 do {
-    var request = nexus.v1().search().assets().search().repository("maven-releases");
     if (token != null) request.continuationToken(token);
     PageAssetXO page = request.complete();
     all.addAll(page.items());
@@ -107,7 +108,4 @@ do {
 } while (token != null);
 ```
 
-:::warning
-Do not reuse one request object for the next page. Each call of a parameter method adds the parameter again, and Nexus
-only reads the first token, so you get the same page again.
-:::
+Each parameter method replaces the value set before, so one request object works for every page.

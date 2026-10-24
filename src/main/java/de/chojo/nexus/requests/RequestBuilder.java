@@ -41,13 +41,13 @@ public abstract class RequestBuilder<T> implements Request<T> {
     }
 
     /**
-     * Adds a parameter to the uri
+     * Sets a parameter of the uri. A parameter set before under the same key is replaced.
      *
      * @param key    parameter key
      * @param object parameter value
      */
     public void parameter(String key, Object object) {
-        uriBuilder.addParameter(key, String.valueOf(object));
+        uriBuilder.setParameter(key, String.valueOf(object));
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class RequestBuilder<T> implements Request<T> {
         try {
             return uriBuilder.build();
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

@@ -31,7 +31,6 @@ tasks.withType<Javadoc>().configureEach {
 dependencies {
     api(platform(libs.jackson.bom))
     api(libs.jackson.databind)
-    api(libs.jackson.jsr310)
     api(libs.bucket4j)
     api(libs.httpcore5)
     api(libs.slf4j.api)
@@ -87,7 +86,22 @@ publishing {
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("live")
+    }
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.register<Test>("liveTest") {
+    description = "Runs the tests against eldonexus.de."
+    group = "verification"
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    useJUnitPlatform {
+        includeTags("live")
+    }
     testLogging {
         events("passed", "skipped", "failed")
     }

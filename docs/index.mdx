@@ -27,7 +27,7 @@ It does not cover the admin parts of the API, like creating repositories, users,
 |---|---|
 | Java | 21 or newer. The library is compiled for Java 21 and ships a module descriptor (`de.chojo.nexus`). |
 | Nexus Repository | 3, with the REST API under `/service/rest/v1`. Checked against 3.96.1 Community. |
-| Jackson | 2 (`com.fasterxml.jackson`). The library brings `jackson-databind` with it. |
+| Jackson | 3 (`tools.jackson`). The library brings `jackson-databind` with it. |
 | SLF4J | The library logs through `slf4j-api` and brings it. Add an SLF4J binding to see the log output. |
 
 ## Add the dependency
@@ -111,3 +111,4 @@ byte[] jar = newest.download().complete();
 - [Assets](./assets.md): read, list, download and delete assets.
 - [Repositories](./repositories.md): list the repositories of a Nexus.
 - [Entities](./entities.md): the objects you get back.
+- [Upgrading to 2.0](./upgrading.md): what changed since 1.0.5.

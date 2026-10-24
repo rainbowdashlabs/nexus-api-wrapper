@@ -22,9 +22,15 @@ NexusRest nexus = NexusRest.builder("nexus.example.com")
         .build();
 ```
 
-The host is a host name only, like `nexus.example.com`. The client always talks to
-`https://<host>/service/rest`, so the Nexus has to be reachable over HTTPS on the default port and without a context
-path.
+With a host name, like `nexus.example.com` or `nexus.example.com:8443`, the client talks to
+`https://<host>/service/rest`.
+
+For a Nexus on plain HTTP or below a path, pass its base URL instead. The client adds `/service/rest` itself:
+
+```java
+NexusRest nexus = NexusRest.builder(URI.create("http://localhost:8081")).build();
+NexusRest behindProxy = NexusRest.builder(URI.create("https://example.com/nexus")).build();
+```
 
 ## Log in
 
@@ -72,11 +78,8 @@ NexusRest nexus = NexusRest.builder("nexus.example.com")
         .build();
 ```
 
-:::warning
-The default pool uses normal (non-daemon) threads and the client has no `close()`. After the first `queue()` call, a
-program that only ends when its last thread ends keeps running. Pass your own executor and shut it down yourself if
-that matters to you.
-:::
+The default pool uses daemon threads named `nexus-api-wrapper-<n>`, so it never keeps your program running. The client
+has no `close()`; an executor you pass in is yours to shut down.
 
 ## Logging
 

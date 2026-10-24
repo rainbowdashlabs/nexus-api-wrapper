@@ -7,16 +7,13 @@
 package de.chojo.nexus.requests;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.chojo.nexus.NexusRest;
 import de.chojo.nexus.NexusRestImpl;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.InjectableValues;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Class providing preconfigured {@link ObjectMapper}
@@ -27,23 +24,21 @@ public final class Mapper {
     }
 
     /**
-     * A mapper able to map items and everything used in rest response
+     * A mapper able to map items and everything used in rest response. Entities that need the client to send follow-up
+     * requests get it injected as {@link NexusRest}.
      *
+     * @param nexusRest client injected into entities
      * @return object mapper
      */
     public static ObjectMapper create(NexusRestImpl nexusRest) {
-        SimpleModule module = new SimpleModule();
-        InjectableValues.Std iv = new InjectableValues.Std();
-        iv.addValue(NexusRest.class, nexusRest);
-        // iv.addValue(NexusRestImpl.class, nexusRest);
+        InjectableValues.Std injectables = new InjectableValues.Std();
+        injectables.addValue(NexusRest.class, nexusRest);
         return JsonMapper.builder()
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-                .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .build()
-                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NONE)
-                .setInjectableValues(iv)
-                .registerModule(module)
-                .registerModule(new JavaTimeModule());
+                .enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .changeDefaultVisibility(visibility -> visibility.withFieldVisibility(JsonAutoDetect.Visibility.NONE))
+                .injectableValues(injectables)
+                .build();
     }
 }

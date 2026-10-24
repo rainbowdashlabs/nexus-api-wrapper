@@ -11,8 +11,10 @@ import de.chojo.nexus.requests.v1.search.Direction;
 import de.chojo.nexus.requests.v1.search.Sort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+@Tag("live")
 class DownloadRequestTest {
 
     NexusRest rest;
@@ -21,7 +23,6 @@ class DownloadRequestTest {
     @BeforeEach
     void setUp() {
         rest = NexusRest.builder("eldonexus.de").build();
-        // Download the first asset we can find
         request = rest.v1()
                 .search()
                 .assets()

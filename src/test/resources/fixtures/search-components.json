@@ -1,0 +1,149 @@
+{
+  "items": [
+    {
+      "id": "bWF2ZW4tcmVsZWFzZXM6YzVjNzFhZDk",
+      "repository": "maven-releases",
+      "format": "maven2",
+      "group": "de.chojo",
+      "name": "nexus-api-wrapper",
+      "version": "1.0.2",
+      "assets": [
+        {
+          "downloadUrl": "{{base}}/repository/maven-releases/de/chojo/nexus-api-wrapper/1.0.2/nexus-api-wrapper-1.0.2.jar",
+          "path": "/de/chojo/nexus-api-wrapper/1.0.2/nexus-api-wrapper-1.0.2.jar",
+          "id": "bWF2ZW4tcmVsZWFzZXM6MWQzZDQ2YTA",
+          "repository": "maven-releases",
+          "format": "maven2",
+          "checksum": {
+            "md5": "6a6af687951d45c72fc0a6f1b96ccdc1",
+            "sha1": "83229da3a478f5e27cb122c94ed210e80475f14a",
+            "sha256": "90b425012e39b59829a0482f06a89ab7ce9fb0c7c9e42e122ca748ef1d4f1413",
+            "sha512": "438360e74f273ab568caa41d266f068e87bdb9f9c423ef09f226641d9ce6344d33a5ce86f050cd76eb18f062c62b27d7e0d773ae40a9a7e3c73befb721178ebc"
+          },
+          "contentType": "application/java-archive",
+          "lastModified": "2023-03-08T16:03:38.656+00:00",
+          "lastDownloaded": "2023-03-09T04:31:19.418+00:00",
+          "uploader": null,
+          "uploaderIp": null,
+          "fileSize": 38174,
+          "blobCreated": "2023-03-08T16:03:38.656+00:00",
+          "blobStoreName": "default",
+          "blobUpdated": "2023-03-08T16:03:38.656+00:00",
+          "blobRef": "default@446c1866-e24a-4c33-be55-469a08da4f78",
+          "lastVerified": null,
+          "registryUrl": null,
+          "maven2": {
+            "extension": "jar",
+            "artifactId": "nexus-api-wrapper",
+            "version": "1.0.2",
+            "groupId": "de.chojo"
+          }
+        },
+        {
+          "downloadUrl": "{{base}}/repository/maven-releases/de/chojo/nexus-api-wrapper/1.0.2/nexus-api-wrapper-1.0.2.jar.sha256",
+          "path": "/de/chojo/nexus-api-wrapper/1.0.2/nexus-api-wrapper-1.0.2.jar.sha256",
+          "id": "bWF2ZW4tcmVsZWFzZXM6NmM1OTAzN2Q",
+          "repository": "maven-releases",
+          "format": "maven2",
+          "checksum": {
+            "md5": "2c7cf9dd9b12c562a4c011ec60426440",
+            "sha1": "8531be194aefbb44049060aabe517d1990e15b4b",
+            "sha256": "122460d02f585f1166630c6f729e340492c77a9ca3efccec2c9259a939929e88",
+            "sha512": "e1ce5df4eeef4ef6caa612f4fffb2a0d3bbb75b1869a3ff29c590a1a499dec12e618683fac22d4487203277d48930974af8bc1f85eb9d0545b97b12659b4f4af"
+          },
+          "contentType": "application/octet-stream",
+          "lastModified": "2023-03-08T16:03:38.966+00:00",
+          "lastDownloaded": null,
+          "uploader": null,
+          "uploaderIp": null,
+          "fileSize": 64,
+          "blobCreated": "2023-03-08T16:03:38.966+00:00",
+          "blobStoreName": "default",
+          "blobUpdated": "2023-03-08T16:03:38.966+00:00",
+          "blobRef": "default@02849035-f876-4cd8-ae4d-eee8edf9a543",
+          "lastVerified": null,
+          "registryUrl": null,
+          "maven2": {
+            "extension": "jar.sha256",
+            "artifactId": "nexus-api-wrapper",
+            "version": "1.0.2",
+            "groupId": "de.chojo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bWF2ZW4tcmVsZWFzZXM6NjNmZTk0OTM",
+      "repository": "maven-releases",
+      "format": "maven2",
+      "group": "de.chojo",
+      "name": "nexus-api-wrapper",
+      "version": "1.0.3",
+      "assets": [
+        {
+          "downloadUrl": "{{base}}/repository/maven-releases/de/chojo/nexus-api-wrapper/1.0.3/nexus-api-wrapper-1.0.3.jar.sha1",
+          "path": "/de/chojo/nexus-api-wrapper/1.0.3/nexus-api-wrapper-1.0.3.jar.sha1",
+          "id": "bWF2ZW4tcmVsZWFzZXM6NDZmZjcwYWI",
+          "repository": "maven-releases",
+          "format": "maven2",
+          "checksum": {
+            "md5": "70a80cf12c33b2ad99a9cf26f3b5e1ce",
+            "sha1": "93ee3c582eeaea33e6908c3f4669c5867331a74f",
+            "sha256": "4e9fa4123157ee352335b55f1c8076dac79aae23a38f740a24c5469cc99f52e7",
+            "sha512": "8fe12f98a27427a40345a00edfdee15f78a72d361fcfb88eb6f5a4a4fba86fe87c7f2b14257664f0b827467aca3420546aa5f424fe8fe79be18d6da4d61d6aa4"
+          },
+          "contentType": "application/octet-stream",
+          "lastModified": "2023-03-09T10:28:52.538+00:00",
+          "lastDownloaded": null,
+          "uploader": null,
+          "uploaderIp": null,
+          "fileSize": 40,
+          "blobCreated": "2023-03-09T10:28:52.538+00:00",
+          "blobStoreName": "default",
+          "blobUpdated": "2023-03-09T10:28:52.538+00:00",
+          "blobRef": "default@a4769d4c-68fa-4904-ae8c-d0c14aa5514c",
+          "lastVerified": null,
+          "registryUrl": null,
+          "maven2": {
+            "extension": "jar.sha1",
+            "artifactId": "nexus-api-wrapper",
+            "version": "1.0.3",
+            "groupId": "de.chojo"
+          }
+        },
+        {
+          "downloadUrl": "{{base}}/repository/maven-releases/de/chojo/nexus-api-wrapper/1.0.3/nexus-api-wrapper-1.0.3.jar.sha512",
+          "path": "/de/chojo/nexus-api-wrapper/1.0.3/nexus-api-wrapper-1.0.3.jar.sha512",
+          "id": "bWF2ZW4tcmVsZWFzZXM6OTYxYjJkODg",
+          "repository": "maven-releases",
+          "format": "maven2",
+          "checksum": {
+            "md5": "86a89aceb720afc2c88e3dd17dfda339",
+            "sha1": "fb7a4e0b18f19d930ff5bb1534b8471e9f86c3bf",
+            "sha256": "d80c69dc793b8c456f68be3dfeb000f95d9fe6e6fdffd63c4e5fbe9c9eefb46e",
+            "sha512": "75fa23898a234043ae5ed686f043360f5912de96a13772aa51a8bcbac9533e8f84c8af524db061b938cc4cc97bac05edf7d45b10b8761afef0d251f7bfc3691a"
+          },
+          "contentType": "application/octet-stream",
+          "lastModified": "2023-03-09T10:28:53.042+00:00",
+          "lastDownloaded": null,
+          "uploader": null,
+          "uploaderIp": null,
+          "fileSize": 128,
+          "blobCreated": "2023-03-09T10:28:53.042+00:00",
+          "blobStoreName": "default",
+          "blobUpdated": "2023-03-09T10:28:53.042+00:00",
+          "blobRef": "default@bf128aae-b12e-4928-a388-0e620942103c",
+          "lastVerified": null,
+          "registryUrl": null,
+          "maven2": {
+            "extension": "jar.sha512",
+            "artifactId": "nexus-api-wrapper",
+            "version": "1.0.3",
+            "groupId": "de.chojo"
+          }
+        }
+      ]
+    }
+  ],
+  "continuationToken": null
+}
