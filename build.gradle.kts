@@ -5,8 +5,7 @@ plugins {
     alias(libs.plugins.publishdata)
 }
 
-group = "de.chojo"
-version = "1.0.5"
+description = "Java client for the REST API of Sonatype Nexus Repository 3."
 
 repositories {
     mavenCentral()
@@ -56,35 +55,40 @@ spotless {
 }
 
 publishData {
-    useEldoNexusRepos()
-    publishComponent("java")
+    eldoNexus(dev = false)
 }
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        publishData.configurePublication(this)
-    }
-
-    repositories {
-        maven {
-            authentication {
-                credentials(PasswordCredentials::class) {
-                    username = System.getenv("NEXUS_USERNAME")
-                    password = System.getenv("NEXUS_PASSWORD")
+    publications.withType<MavenPublication>().configureEach {
+        pom {
+            url = "https://github.com/rainbowdashlabs/nexus-api-wrapper"
+            inceptionYear = "2023"
+            licenses {
+                license {
+                    name = "LGPL-3.0-or-later"
+                    url = "https://www.gnu.org/licenses/lgpl-3.0.html"
                 }
             }
-
-            setUrl(publishData.getRepository())
-            name = "EldoNexus"
+            developers {
+                developer {
+                    id = "rainbowdashlabs"
+                    name = "Nora Fülling"
+                    email = "mail@chojo.dev"
+                    url = "https://github.com/rainbowdashlabs"
+                }
+            }
+            scm {
+                url = "https://github.com/rainbowdashlabs/nexus-api-wrapper"
+                connection = "scm:git:git://github.com/rainbowdashlabs/nexus-api-wrapper.git"
+                developerConnection = "scm:git:ssh://github.com/rainbowdashlabs/nexus-api-wrapper.git"
+            }
         }
     }
 }
 
-tasks {
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
-        }
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }
