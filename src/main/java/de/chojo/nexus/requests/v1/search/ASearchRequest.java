@@ -111,163 +111,163 @@ public abstract class ASearchRequest<Self extends ASearchRequest<?, T>, T> exten
         return (Self) this;
     }
 
-    public Self dockerImageTag(String imageName) {
-        parameter("docker.imageTag", imageName);
+    public Self dockerImageTag(String imageTag) {
+        parameter("docker.imageTag", imageTag);
         return (Self) this;
     }
 
-    public Self dockerLayerId(String imageName) {
-        parameter("docker.layerId", imageName);
+    public Self dockerLayerId(String layerId) {
+        parameter("docker.layerId", layerId);
         return (Self) this;
     }
 
-    public Self dockerContentDigest(String imageName) {
-        parameter("docker.contentDigest", imageName);
+    public Self dockerContentDigest(String contentDigest) {
+        parameter("docker.contentDigest", contentDigest);
         return (Self) this;
     }
 
-    public Self mavenGroupId(String imageName) {
-        parameter("maven.groupId", imageName);
+    public Self mavenGroupId(String groupId) {
+        parameter("maven.groupId", groupId);
         return (Self) this;
     }
 
-    public Self mavenArtifactId(String imageName) {
-        parameter("maven.artifactId", imageName);
+    public Self mavenArtifactId(String artifactId) {
+        parameter("maven.artifactId", artifactId);
         return (Self) this;
     }
 
-    public Self mavenBaseVersion(String imageName) {
-        parameter("maven.baseVersion", imageName);
+    public Self mavenBaseVersion(String baseVersion) {
+        parameter("maven.baseVersion", baseVersion);
         return (Self) this;
     }
 
-    public Self mavenExtension(String imageName) {
-        parameter("maven.extension", imageName);
+    public Self mavenExtension(String extension) {
+        parameter("maven.extension", extension);
         return (Self) this;
     }
 
-    public Self mavenClassifier(String imageName) {
-        parameter("maven.classifier", imageName);
+    public Self mavenClassifier(String classifier) {
+        parameter("maven.classifier", classifier);
         return (Self) this;
     }
 
-    public Self gavec(String imageName) {
-        parameter("gavec", imageName);
+    public Self gavec(String gavec) {
+        parameter("gavec", gavec);
         return (Self) this;
     }
 
-    public Self npmScope(String imageName) {
-        parameter("npm.scope", imageName);
+    public Self npmScope(String scope) {
+        parameter("npm.scope", scope);
         return (Self) this;
     }
 
-    public Self npmAuthor(String imageName) {
-        parameter("npm.author", imageName);
+    public Self npmAuthor(String author) {
+        parameter("npm.author", author);
         return (Self) this;
     }
 
-    public Self npmDescription(String imageName) {
-        parameter("npm.description", imageName);
+    public Self npmDescription(String description) {
+        parameter("npm.description", description);
         return (Self) this;
     }
 
-    public Self npmKeywords(String imageName) {
-        parameter("npm.keywords", imageName);
+    public Self npmKeywords(String keywords) {
+        parameter("npm.keywords", keywords);
         return (Self) this;
     }
 
-    public Self npmLicense(String imageName) {
-        parameter("npm.license", imageName);
+    public Self npmLicense(String license) {
+        parameter("npm.license", license);
         return (Self) this;
     }
 
-    public Self npmTaggedIs(String imageName) {
-        parameter("npm.tagged_is", imageName);
+    public Self npmTaggedIs(String taggedIs) {
+        parameter("npm.tagged_is", taggedIs);
         return (Self) this;
     }
 
-    public Self npmTaggedNot(String imageName) {
-        parameter("npm.tagged_not", imageName);
+    public Self npmTaggedNot(String taggedNot) {
+        parameter("npm.tagged_not", taggedNot);
         return (Self) this;
     }
 
-    public Self nugetId(String imageName) {
-        parameter("nuget.id", imageName);
+    public Self nugetId(String id) {
+        parameter("nuget.id", id);
         return (Self) this;
     }
 
-    public Self nugetTags(String imageName) {
-        parameter("nuget.tags", imageName);
+    public Self nugetTags(String tags) {
+        parameter("nuget.tags", tags);
         return (Self) this;
     }
 
-    public Self nugetTitle(String imageName) {
-        parameter("nuget.title", imageName);
+    public Self nugetTitle(String title) {
+        parameter("nuget.title", title);
         return (Self) this;
     }
 
-    public Self nugetAuthors(String imageName) {
-        parameter("nuget.authors", imageName);
+    public Self nugetAuthors(String authors) {
+        parameter("nuget.authors", authors);
         return (Self) this;
     }
 
-    public Self nugetDescription(String imageName) {
-        parameter("nuget.description", imageName);
+    public Self nugetDescription(String description) {
+        parameter("nuget.description", description);
         return (Self) this;
     }
 
-    public Self nugetSummary(String imageName) {
-        parameter("nuget.summary", imageName);
+    public Self nugetSummary(String summary) {
+        parameter("nuget.summary", summary);
         return (Self) this;
     }
 
-    public Self p2PluginName(String imageName) {
-        parameter("p2.pluginName", imageName);
+    public Self p2PluginName(String pluginName) {
+        parameter("p2.pluginName", pluginName);
         return (Self) this;
     }
 
-    public Self pypiClassifiers(String imageName) {
-        parameter("pypi.classifiers", imageName);
+    public Self pypiClassifiers(String classifiers) {
+        parameter("pypi.classifiers", classifiers);
         return (Self) this;
     }
 
-    public Self pypiDescription(String imageName) {
-        parameter("pypi.description", imageName);
+    public Self pypiDescription(String description) {
+        parameter("pypi.description", description);
         return (Self) this;
     }
 
-    public Self pypiKeywords(String imageName) {
-        parameter("pypi.keywords", imageName);
+    public Self pypiKeywords(String keywords) {
+        parameter("pypi.keywords", keywords);
         return (Self) this;
     }
 
-    public Self pypiSummary(String imageName) {
-        parameter("pypi.summary", imageName);
+    public Self pypiSummary(String summary) {
+        parameter("pypi.summary", summary);
         return (Self) this;
     }
 
-    public Self rubygemsDescription(String imageName) {
-        parameter("rubygems.description", imageName);
+    public Self rubygemsDescription(String description) {
+        parameter("rubygems.description", description);
         return (Self) this;
     }
 
-    public Self rubygemsPlatform(String imageName) {
-        parameter("rubygems.platform", imageName);
+    public Self rubygemsPlatform(String platform) {
+        parameter("rubygems.platform", platform);
         return (Self) this;
     }
 
-    public Self rubygemsSummary(String imageName) {
-        parameter("rubygems.summary", imageName);
+    public Self rubygemsSummary(String summary) {
+        parameter("rubygems.summary", summary);
         return (Self) this;
     }
 
-    public Self yumArchitecture(String imageName) {
-        parameter("yum.architecture", imageName);
+    public Self yumArchitecture(String architecture) {
+        parameter("yum.architecture", architecture);
         return (Self) this;
     }
 
-    public Self yumName(String imageName) {
-        parameter("yum.name", imageName);
+    public Self yumName(String name) {
+        parameter("yum.name", name);
         return (Self) this;
     }
 }
