@@ -21,8 +21,8 @@ AssetXO asset = nexus.v1().assets().get(id).complete();
 PageAssetXO page = nexus.v1().assets().list("maven-releases").complete();
 ```
 
-The list comes in pages like a search. Pass the token of the previous page with `continuationToken(token)` on a new
-request; see [Pages](./search.md#pages).
+The list comes in pages like a search. Pass the token of the previous page with `continuationToken(token)`;
+see [Pages](./search.md#pages).
 
 ## Download
 
