@@ -18,6 +18,9 @@ import org.jetbrains.annotations.Nullable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+/**
+ * A single file in a repository.
+ */
 public final class AssetXO {
     @JacksonInject
     private NexusRest nexusRest;
@@ -32,7 +35,7 @@ public final class AssetXO {
     private final String id;
 
     @JsonProperty
-    private final String Repository;
+    private final String repository;
 
     @JsonProperty
     private final String format;
@@ -56,7 +59,7 @@ public final class AssetXO {
     private final String uploaderIp;
 
     @JsonProperty
-    private final int fileSize;
+    private final long fileSize;
 
     @JsonProperty
     private final MavenMeta maven2;
@@ -66,7 +69,7 @@ public final class AssetXO {
             @JsonProperty("downloadUrl") String downloadUrl,
             @JsonProperty("path") String path,
             @JsonProperty("id") String id,
-            @JsonProperty("Repository") String Repository,
+            @JsonProperty("repository") String repository,
             @JsonProperty("format") String format,
             @JsonProperty("contentType") String contentType,
             @JsonProperty("lastModified") OffsetDateTime lastModified,
@@ -74,12 +77,12 @@ public final class AssetXO {
             @JsonProperty("checksum") Checksum checksum,
             @JsonProperty("uploader") String uploader,
             @JsonProperty("uploaderIp") String uploaderIp,
-            @JsonProperty("fileSize") int fileSize,
+            @JsonProperty("fileSize") long fileSize,
             @JsonProperty("maven2") MavenMeta maven2) {
         this.downloadUrl = downloadUrl;
         this.path = path;
         this.id = id;
-        this.Repository = Repository;
+        this.repository = repository;
         this.format = format;
         this.contentType = contentType;
         this.lastModified = lastModified;
@@ -111,9 +114,14 @@ public final class AssetXO {
         return id;
     }
 
+    /**
+     * The name of the repository that holds the asset.
+     *
+     * @return repository name
+     */
     @JsonProperty
-    public String Repository() {
-        return Repository;
+    public String repository() {
+        return repository;
     }
 
     @JsonProperty
@@ -151,8 +159,13 @@ public final class AssetXO {
         return uploaderIp;
     }
 
+    /**
+     * The size of the file in bytes.
+     *
+     * @return size in bytes
+     */
     @JsonProperty
-    public int fileSize() {
+    public long fileSize() {
         return fileSize;
     }
 
@@ -170,7 +183,7 @@ public final class AssetXO {
                 && Objects.equals(this.downloadUrl, that.downloadUrl)
                 && Objects.equals(this.path, that.path)
                 && Objects.equals(this.id, that.id)
-                && Objects.equals(this.Repository, that.Repository)
+                && Objects.equals(this.repository, that.repository)
                 && Objects.equals(this.format, that.format)
                 && Objects.equals(this.contentType, that.contentType)
                 && Objects.equals(this.lastModified, that.lastModified)
@@ -189,7 +202,7 @@ public final class AssetXO {
                 downloadUrl,
                 path,
                 id,
-                Repository,
+                repository,
                 format,
                 contentType,
                 lastModified,
@@ -207,8 +220,8 @@ public final class AssetXO {
                 + nexusRest + ", " + "downloadUrl="
                 + downloadUrl + ", " + "path="
                 + path + ", " + "id="
-                + id + ", " + "Repository="
-                + Repository + ", " + "format="
+                + id + ", " + "repository="
+                + repository + ", " + "format="
                 + format + ", " + "contentType="
                 + contentType + ", " + "lastModified="
                 + lastModified + ", " + "lastDownloaded="
