@@ -10,12 +10,14 @@ import org.jetbrains.annotations.CheckReturnValue;
 
 import java.net.Authenticator;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Class to build a nexus rest client
@@ -26,7 +28,7 @@ public class NexusRestBuilder {
             .version(HttpClient.Version.HTTP_2)
             .followRedirects(HttpClient.Redirect.NORMAL)
             .connectTimeout(Duration.ofSeconds(60));
-    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService executorService;
     private final Map<String, String> header = new HashMap<>();
     private final String host;
 
@@ -59,7 +61,7 @@ public class NexusRestBuilder {
     }
 
     /**
-     * Set the authenticator for the underlying {@link HttpClient} builder.
+     * Log in with HTTP Basic authentication. The credentials are sent with every request.
      *
      * @param username username
      * @param password password
@@ -68,16 +70,27 @@ public class NexusRestBuilder {
     @CheckReturnValue
     public NexusRestBuilder setPasswordAuth(String username, String password) {
         String valueToEncode = "%s:%s".formatted(username, password);
-        return header("Authorization", "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes()));
+        return header(
+                "Authorization",
+                "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes(StandardCharsets.UTF_8)));
     }
 
+    /**
+     * Add a header that is sent with every request.
+     *
+     * @param key   header name
+     * @param value header value
+     * @return builder
+     */
+    @CheckReturnValue
     public NexusRestBuilder header(String key, String value) {
         header.put(key, value);
         return this;
     }
 
     /**
-     * Set the executor service used for asynchronous requests.
+     * Set the executor service used for asynchronous requests. Without one, the client uses a pool of two daemon
+     * threads, which does not keep the JVM running.
      *
      * @param executorService executor service
      * @return builder
@@ -95,6 +108,19 @@ public class NexusRestBuilder {
      */
     @CheckReturnValue
     public NexusRest build() {
-        return new NexusRestImpl(http != null ? http : httpBuilder.build(), executorService, host, header);
+        return new NexusRestImpl(
+                http != null ? http : httpBuilder.build(),
+                executorService != null ? executorService : defaultExecutor(),
+                host,
+                header);
+    }
+
+    private static ScheduledExecutorService defaultExecutor() {
+        AtomicInteger count = new AtomicInteger();
+        return Executors.newScheduledThreadPool(2, runnable -> {
+            Thread thread = new Thread(runnable, "nexus-api-wrapper-" + count.incrementAndGet());
+            thread.setDaemon(true);
+            return thread;
+        });
     }
 }
