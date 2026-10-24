@@ -74,7 +74,7 @@ public abstract class RequestBuilder<T> implements Request<T> {
         try {
             return uriBuilder.build();
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

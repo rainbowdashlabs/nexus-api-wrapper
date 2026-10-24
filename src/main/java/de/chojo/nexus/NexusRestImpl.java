@@ -18,24 +18,30 @@ import tools.jackson.databind.type.CollectionType;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.function.Supplier;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Implementation of a rest client
+ * Implementation of a rest client.
+ *
+ * <p>Every request waits for the shared rate limit first. A status outside 200 to 299 ends in a {@link NexusException},
+ * an I/O error in an {@link UncheckedIOException}. Asynchronous requests complete their future exceptionally with the
+ * same exceptions, wrapped in a {@link java.util.concurrent.CompletionException}.
  */
 public class NexusRestImpl implements NexusRest {
     private static final Logger log = getLogger(NexusRestImpl.class);
@@ -51,15 +57,16 @@ public class NexusRestImpl implements NexusRest {
      * Create a new nexus rest client
      *
      * @param http            http client
-     * @param executorService executor service
-     * @param header
+     * @param executorService executor service for asynchronous requests
+     * @param host            host of the nexus
+     * @param header          headers sent with every request
      */
     public NexusRestImpl(
             HttpClient http, ScheduledExecutorService executorService, String host, Map<String, String> header) {
         this.http = http;
         this.executorService = executorService;
         this.host = host;
-        this.header = header;
+        this.header = Map.copyOf(header);
         this.objectMapper = Mapper.create(this);
         this.v1 = new V1(this);
     }
@@ -100,11 +107,7 @@ public class NexusRestImpl implements NexusRest {
      * @return future with result
      */
     public <T> CompletableFuture<T> getAsyncAndMap(URIBuilder uri, Class<T> result) {
-        try {
-            return getAsyncAndMap(uri.build(), result);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        return getAsyncAndMap(build(uri), result);
     }
 
     /**
@@ -116,19 +119,7 @@ public class NexusRestImpl implements NexusRest {
      * @return result
      */
     public <T> T getAndMap(URIBuilder uri, Class<T> result) {
-        try {
-            return getAndMap(uri.build(), result);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private HttpRequest.Builder request(URI uri) {
-        HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
-        for (var entry : header.entrySet()) {
-            builder.header(entry.getKey(), entry.getValue());
-        }
-        return builder;
+        return getAndMap(build(uri), result);
     }
 
     /**
@@ -140,7 +131,7 @@ public class NexusRestImpl implements NexusRest {
      * @return future with result
      */
     public <T> CompletableFuture<T> getAsyncAndMap(URI uri, Class<T> result) {
-        return dispatchAsync(() -> getAndMapInternal(request(uri).GET().build(), result));
+        return dispatchAsync(() -> getAndMapInternal(uri, result));
     }
 
     /**
@@ -152,153 +143,141 @@ public class NexusRestImpl implements NexusRest {
      * @return result
      */
     public <T> T getAndMap(URI uri, Class<T> result) {
-        return dispatch(() -> getAndMapInternal(request(uri).GET().build(), result));
-    }
-
-    public <T> T dispatch(Callable<T> callable) {
-        try {
-            bucket.asBlocking().consume(1);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            return callable.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public <T> CompletableFuture<T> dispatchAsync(Callable<T> callable) {
-        return bucket.asScheduler()
-                .consume(1, executorService)
-                .thenApplyAsync(
-                        v -> {
-                            try {
-                                return callable.call();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        },
-                        executorService);
-    }
-
-    private <T> T getAndMapInternal(HttpRequest request, Class<T> result) {
-        try {
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<String> response = http().send(request, HttpResponse.BodyHandlers.ofString());
-            log.trace("Received\n{}", response.body());
-            handleStatusCode(response);
-            return objectMapper().readValue(response.body(), result);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        return dispatch(() -> getAndMapInternal(uri, result));
     }
 
     /**
-     * Send an asynchronous request to the uri and map the result body
+     * Send an asynchronous request to the uri and map the result body to a list
      *
      * @param uri    uri
-     * @param result result class
-     * @param <T>    result type
+     * @param result element class
+     * @param <T>    element type
      * @return future with result
      */
     public <T> CompletableFuture<List<T>> getAsyncAndMapList(URI uri, Class<T> result) {
-        return dispatchAsync(() -> getAndMapListInternal(request(uri).GET().build(), result));
+        return dispatchAsync(() -> getAndMapListInternal(uri, result));
     }
 
     /**
-     * Send a request and map the result body
+     * Send a request and map the result body to a list
      *
      * @param uri    uri
-     * @param result result class
-     * @param <T>    result type
+     * @param result element class
+     * @param <T>    element type
      * @return result
      */
     public <T> List<T> getAndMapList(URI uri, Class<T> result) {
-        return dispatch(() -> getAndMapListInternal(request(uri).GET().build(), result));
+        return dispatch(() -> getAndMapListInternal(uri, result));
     }
 
-    private <T> List<T> getAndMapListInternal(HttpRequest request, Class<T> result) {
-        try {
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<String> response = http().send(request, HttpResponse.BodyHandlers.ofString());
-            log.trace("Received\n{}", response.body());
-            handleStatusCode(response);
-            CollectionType type = objectMapper().getTypeFactory().constructCollectionType(ArrayList.class, result);
-            return objectMapper().readValue(response.body(), type);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    /**
+     * Send a request and return the body as bytes
+     *
+     * @param uri uri
+     * @return body
+     */
     public byte[] getBytes(URI uri) {
-        return dispatch(() -> getBytesInternal(request(uri).GET().build()));
+        return dispatch(() -> getBytesInternal(uri));
     }
 
+    /**
+     * Send an asynchronous request and return the body as bytes
+     *
+     * @param uri uri
+     * @return future with body
+     */
     public CompletableFuture<byte[]> getAsyncBytes(URI uri) {
-        return dispatchAsync(() -> getBytesInternal(request(uri).GET().build()));
+        return dispatchAsync(() -> getBytesInternal(uri));
     }
 
+    /**
+     * Send a request and return the body as stream. The caller closes the stream.
+     *
+     * @param uri uri
+     * @return body
+     */
     public InputStream getStream(URI uri) {
-        return dispatch(() -> getOutputStreamInternal(request(uri).GET().build()));
+        return dispatch(() -> getStreamInternal(uri));
     }
 
+    /**
+     * Send an asynchronous request and return the body as stream. The caller closes the stream.
+     *
+     * @param uri uri
+     * @return future with body
+     */
     public CompletableFuture<InputStream> getAsyncStream(URI uri) {
-        return dispatchAsync(() -> getOutputStreamInternal(request(uri).GET().build()));
+        return dispatchAsync(() -> getStreamInternal(uri));
     }
 
-    private InputStream getOutputStreamInternal(HttpRequest request) {
-        try {
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<InputStream> response = http().send(request, HttpResponse.BodyHandlers.ofInputStream());
-            log.trace("Received bytes");
-            handleStatusCode(response);
-            return response.body();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private byte[] getBytesInternal(HttpRequest request) {
-        try {
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<byte[]> response = http().send(request, HttpResponse.BodyHandlers.ofByteArray());
-            log.trace("Received bytes");
-            handleStatusCode(response);
-            return response.body();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    /**
+     * Send a request and write the body to a file
+     *
+     * @param uri  uri
+     * @param path file to write, or null for a new temporary file
+     * @return the written file
+     */
     public Path getToFile(URI uri, @Nullable Path path) {
-        return dispatch(() -> getToFileInternal(request(uri).GET().build(), path));
+        return dispatch(() -> getToFileInternal(uri, path));
     }
 
+    /**
+     * Send an asynchronous request and write the body to a file
+     *
+     * @param uri  uri
+     * @param path file to write, or null for a new temporary file
+     * @return future with the written file
+     */
     public CompletableFuture<Path> getAsyncToFile(URI uri, @Nullable Path path) {
-        return dispatchAsync(() -> getToFileInternal(request(uri).GET().build(), path));
+        return dispatchAsync(() -> getToFileInternal(uri, path));
     }
 
-    private Path getToFileInternal(HttpRequest request, @Nullable Path path) {
+    /**
+     * Send a delete request
+     *
+     * @param uri uri
+     * @return null
+     */
+    public Void delete(URI uri) {
+        return dispatch(() -> deleteInternal(uri));
+    }
+
+    /**
+     * Send an asynchronous delete request
+     *
+     * @param uri uri
+     * @return future completed with null
+     */
+    public CompletableFuture<Void> deleteAsync(URI uri) {
+        return dispatchAsync(() -> deleteInternal(uri));
+    }
+
+    /**
+     * Run a call on the current thread once the rate limit allows it.
+     *
+     * @param call call
+     * @param <T>  result type
+     * @return result of the call
+     */
+    public <T> T dispatch(Supplier<T> call) {
         try {
-            path = path == null ? Files.createTempFile("nexus", "file") : path;
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<Path> response = http().send(request, HttpResponse.BodyHandlers.ofFile(path));
-            handleStatusCode(response);
-            log.trace("Received bytes");
-            return response.body();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            bucket.asBlocking().consume(1);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while waiting for the rate limit", e);
         }
+        return call.get();
     }
 
-    private <T> void handleStatusCode(HttpResponse<T> response) {
-        if (response.statusCode() < 200 || response.statusCode() >= 300) {
-            T body = response.body();
-            if (body instanceof String b) throw new RuntimeException(b);
-            if (body instanceof byte[] b) throw new RuntimeException(new String(b));
-            throw new RuntimeException(String.valueOf(body));
-        }
+    /**
+     * Run a call on the executor once the rate limit allows it.
+     *
+     * @param call call
+     * @param <T>  result type
+     * @return future with the result of the call
+     */
+    public <T> CompletableFuture<T> dispatchAsync(Supplier<T> call) {
+        return bucket.asScheduler().consume(1, executorService).thenApplyAsync(v -> call.get(), executorService);
     }
 
     @Override
@@ -306,20 +285,96 @@ public class NexusRestImpl implements NexusRest {
         return v1;
     }
 
-    public <T> CompletableFuture<T> deleteAsync(URI uri) {
-        return dispatchAsync(() -> delete(uri));
+    private <T> T getAndMapInternal(URI uri, Class<T> result) {
+        return objectMapper.readValue(getStringInternal(uri), result);
     }
 
-    public <T> T delete(URI uri) {
+    private <T> List<T> getAndMapListInternal(URI uri, Class<T> result) {
+        CollectionType type = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, result);
+        return objectMapper.readValue(getStringInternal(uri), type);
+    }
+
+    private String getStringInternal(URI uri) {
+        HttpResponse<String> response = send(request(uri).GET().build(), HttpResponse.BodyHandlers.ofString());
+        log.trace("Received\n{}", response.body());
+        if (failed(response)) throw new NexusException(uri, response.statusCode(), response.body());
+        return response.body();
+    }
+
+    private byte[] getBytesInternal(URI uri) {
+        HttpResponse<byte[]> response = send(request(uri).GET().build(), HttpResponse.BodyHandlers.ofByteArray());
+        if (failed(response)) {
+            throw new NexusException(uri, response.statusCode(), new String(response.body(), StandardCharsets.UTF_8));
+        }
+        return response.body();
+    }
+
+    private InputStream getStreamInternal(URI uri) {
+        HttpResponse<InputStream> response =
+                send(request(uri).GET().build(), HttpResponse.BodyHandlers.ofInputStream());
+        if (failed(response)) {
+            try (InputStream body = response.body()) {
+                throw new NexusException(
+                        uri, response.statusCode(), new String(body.readAllBytes(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+        return response.body();
+    }
+
+    private Path getToFileInternal(URI uri, @Nullable Path path) {
         try {
-            HttpRequest request = request(uri).DELETE().build();
-            log.trace("Requesting {}", request.uri());
-            HttpResponse<String> response = http().send(request, HttpResponse.BodyHandlers.ofString());
-            log.trace("Received\n{}", response.body());
-            handleStatusCode(response);
-            return null;
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            Path target = path == null ? Files.createTempFile("nexus", "file") : path;
+            HttpResponse<Path> response = send(request(uri).GET().build(), HttpResponse.BodyHandlers.ofFile(target));
+            if (failed(response)) {
+                String body = new String(Files.readAllBytes(target), StandardCharsets.UTF_8);
+                Files.deleteIfExists(target);
+                throw new NexusException(uri, response.statusCode(), body);
+            }
+            return response.body();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private Void deleteInternal(URI uri) {
+        sendWithoutBody(request(uri).DELETE().build());
+        return null;
+    }
+
+    private void sendWithoutBody(HttpRequest request) {
+        HttpResponse<String> response = send(request, HttpResponse.BodyHandlers.ofString());
+        if (failed(response)) throw new NexusException(request.uri(), response.statusCode(), response.body());
+    }
+
+    private <T> HttpResponse<T> send(HttpRequest request, HttpResponse.BodyHandler<T> handler) {
+        log.trace("Requesting {} {}", request.method(), request.uri());
+        try {
+            return http.send(request, handler);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while waiting for Nexus", e);
+        }
+    }
+
+    private HttpRequest.Builder request(URI uri) {
+        HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
+        header.forEach(builder::header);
+        return builder;
+    }
+
+    private static boolean failed(HttpResponse<?> response) {
+        return response.statusCode() < 200 || response.statusCode() >= 300;
+    }
+
+    private static URI build(URIBuilder uri) {
+        try {
+            return uri.build();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }
