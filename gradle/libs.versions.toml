@@ -1,6 +1,6 @@
 [versions]
 palantir = "2.102.0"
-publishdata = "2.2.0"
+publishdata = "2.3.0"
 spotless = "8.10.4"
 jackson = "3.2.4"
 junit = "6.1.3"
